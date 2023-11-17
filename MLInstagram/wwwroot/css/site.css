@@ -1,0 +1,48 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.create-elements {
+    margin-top: 15rem;
+    margin-bottom : 15rem;
+}
+
+.card-header-custom {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.create-card-body {
+    background-repeat: no-repeat;
+    background-size : contain;
+    vertical-align: middle;
+}
+
+.vertical-center {
+    align-items:center;
+    justify-content:center;
+}
+
+.iphone-frame {
+    background-image: url(../images/iphonewallpaper1.png);
+    background-repeat: no-repeat;
+    background-position:50%;
+    height: 600px;
+    transition: background-image 1s; 
+}

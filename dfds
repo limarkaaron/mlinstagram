@@ -1,0 +1,59 @@
+[33mcommit 905b764d614f6ad3b08cdc7bea5ec930cfeee4f7[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Fri Nov 17 14:26:36 2023 +0800
+
+    create view UI
+
+[33mcommit 2acdfd402010aa65d124144ca23189d38d89b03e[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Fri Nov 17 02:52:58 2023 +0800
+
+    fixed configuration to access secret.json file
+
+[33mcommit bf44defabb648644b06d6479ee685d6184e6047e[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Fri Nov 17 02:01:08 2023 +0800
+
+    removed sensitive aws data
+
+[33mcommit bddd6eb3523983694eca611030b7e1382a41c49b[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Fri Nov 17 01:53:24 2023 +0800
+
+    finished login page UI
+
+[33mcommit 7139100fa1b75dfdd12c7c87d2e350fa608ead54[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Thu Nov 16 15:49:37 2023 +0800
+
+    made new AWS IAM role for public CRUD posts use
+
+[33mcommit 0862ede50e2bb7086120573d94b910f1d3af07f2[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Thu Nov 16 14:19:15 2023 +0800
+
+    removed sensitive data
+
+[33mcommit 76baff9bad0bff576ba3e49c251c5e1bf6b0c5aa[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Thu Nov 16 13:52:50 2023 +0800
+
+    started "create post" UI, data validation for user registration started as well
+
+[33mcommit ae71cb78ae488d75f44e997f63080d253123f4ff[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Tue Nov 14 21:41:31 2023 +0800
+
+    removed appsettings, added user secrets
+
+[33mcommit 61a4ffed717a8da3e75d63e40d65369eaeca0c27[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Tue Nov 14 21:40:16 2023 +0800
+
+    removed appsettings.json , edited secrets.json
+
+[33mcommit 0753eaebf3abd62d39a2b08983d5689ae2b89be1[m
+Author: Mark Aaron Li <limarkaaron@gmail.com>
+Date:   Tue Nov 14 19:58:23 2023 +0800
+
+    aws rds set up (sql database), migration done for registration and posts model

@@ -1,0 +1,49 @@
+﻿@page
+@model LoginModel
+
+@{
+	ViewData["Title"] = "Log in";
+}
+<div class="container vertical-center d-lg-flex">
+	<div class="row align-items-center" style="min-height:90vh">
+		<div class="col-lg-6 d-none d-lg-block">
+			<img src="~/images/iphonexmock.png" class="iphone-frame" />
+		</div>
+		<div class="col-12 col-lg-5 ms-3">
+			<form class="card px-4" id="account" method="post">
+				<h2 class="text-center my-5">Instagram</h2>
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="form-floating my-1">
+					<input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+					<label asp-for="Input.Email" class="form-label"></label>
+					<span asp-validation-for="Input.Email" class="text-danger"></span>
+				</div>
+				<div class="form-floating my-1">
+					<input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+					<label asp-for="Input.Password" class="form-label"></label>
+					<span asp-validation-for="Input.Password" class="text-danger"></span>
+				</div>
+				<div>
+					<button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary mt-4">Log in</button>
+				</div>
+				<br/>
+				<p class="text-center mb-3">OR</p>
+				<div class="text-center">
+					<a>Log in with Facebook</a>
+					<br/>
+					<a>Forgot password?</a>
+				</div>
+			</form>
+			<div class="card my-3">
+				<div class="card-body text-center">
+					<p class="d-inline">Don't have an account?</p>
+					<a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Sign up</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="~/js/LoginPage.js"></script>
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
