@@ -134,8 +134,10 @@ namespace MLInstagram.Areas.Identity.Pages.Account
 
                 user.FullName = Input.FullName;
                 user.IGHandle = Input.IGHandle;
+                user.ProfilePicUrl = "~/images/profpicdefault.jpg";
 
-                var result = await _userManager.CreateAsync(user, Input.Password);
+
+				var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {

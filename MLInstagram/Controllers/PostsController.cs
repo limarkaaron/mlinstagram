@@ -7,6 +7,9 @@ using MLInstagram.Models;
 using Amazon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity;
+using Amazon.S3.Model;
+using System.Diagnostics;
 
 namespace MLInstagram.Controllers
 {
@@ -16,19 +19,22 @@ namespace MLInstagram.Controllers
 		private readonly ApplicationDbContext _context;
 		private readonly IConfiguration _config;
 		private readonly IOptions<AWSUserInfo> _options;
-		public PostsController(ApplicationDbContext context, IConfiguration config, IOptions<AWSUserInfo> options)
+		private readonly UserManager<MLInstagramUser> _userManager;
+		public PostsController(ApplicationDbContext context, IConfiguration config, IOptions<AWSUserInfo> options, UserManager<MLInstagramUser> userManager)
 		{
 			_context = context;
 			_config = config;
 			_options = options;
+			_userManager = userManager;
 		}
 
 		// GET: Posts
 		public async Task<IActionResult> Index()
 		{
-			return _context.Posts != null ?
-						View(await _context.Posts.ToListAsync()) :
-						Problem("Entity set 'ApplicationDbContext.Posts'  is null.");
+			var context = _context.Posts.Where(post => post.UploaderId == _userManager.GetUserId(User));
+			ViewBag.CurrentUser = _userManager.Users.FirstOrDefault(x => x.UserName == _userManager.GetUserName(User));
+			ViewBag.CurrentDate = DateTime.Now;
+			return View(await context.ToListAsync());
 		}
 
 		// GET: Posts/Details/5
@@ -59,8 +65,11 @@ namespace MLInstagram.Controllers
 		// To protect from overposting attacks, enable the specific properties you want to bind to.
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
-		public async Task<IActionResult> Create(IFormFile file)
+		public async Task<IActionResult> Create(IFormFile file, string caption)
 		{
+			string objectUrl;
+			int uniqueNum = _context.Posts.OrderBy(x => x.Id).Last().Id;
+
 			//access key and secret key with S3 region
 			using (var amazonS3client = new AmazonS3Client(_options.Value.AccessKey, _options.Value.SecretKey, RegionEndpoint.APSoutheast1))
 			{
@@ -70,18 +79,22 @@ namespace MLInstagram.Controllers
 					var request = new TransferUtilityUploadRequest
 					{
 						InputStream = memorystream,
-						Key = file.FileName,
+						Key = file.FileName + uniqueNum,
 						BucketName = _options.Value.S3Bucket,
-						ContentType = file.ContentType,
-						CannedACL = S3CannedACL.PublicRead
+						ContentType = file.ContentType
 					};
 					var transferUtility = new TransferUtility(amazonS3client);
 					await transferUtility.UploadAsync(request);
+					objectUrl = $"https://{_options.Value.S3Bucket}.s3.{RegionEndpoint.APSoutheast1.SystemName}.amazonaws.com/" + file.FileName + uniqueNum;
+
 				}
 			}
 			Post fileDetails = new Post();
 			fileDetails.FileName = file.FileName;
 			fileDetails.DatePosted = DateTime.Now;
+			fileDetails.Caption = caption;
+			fileDetails.UploaderId = _userManager.GetUserId(User);
+			fileDetails.S3Url = objectUrl;
 
 			_context.Posts.Add(fileDetails);
 			_context.SaveChanges();
@@ -162,20 +175,26 @@ namespace MLInstagram.Controllers
 		// POST: Posts/Delete/5
 		[HttpPost, ActionName("Delete")]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteConfirmed(int id)
+		public async Task<IActionResult> DeleteConfirmed(string Filename)
 		{
-			if (_context.Posts == null)
+			using (var amazonS3client = new AmazonS3Client(_options.Value.AccessKey, _options.Value.SecretKey, RegionEndpoint.APSoutheast1))
 			{
-				return Problem("Entity set 'ApplicationDbContext.Posts'  is null.");
-			}
-			var posts = await _context.Posts.FindAsync(id);
-			if (posts != null)
-			{
-				_context.Posts.Remove(posts);
-			}
+				var transferUtility = new TransferUtility(amazonS3client);
+				await transferUtility.S3Client.DeleteObjectAsync(new DeleteObjectRequest()
+				{
+					Key = Filename,
+					BucketName = _options.Value.S3Bucket,
+				});
 
-			await _context.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+				Post fileDetails = new Post();
+				fileDetails = _context.Posts.FirstOrDefault(x => x.FileName.ToLower() == Filename.ToLower());
+
+				_context.Posts.Remove(fileDetails);
+				_context.SaveChanges();
+
+				ViewBag.Success = "File Deleted Successfully on S3 Bucket";
+				return RedirectToAction(nameof(Index));
+			}
 		}
 
 		private bool PostsExists(int id)

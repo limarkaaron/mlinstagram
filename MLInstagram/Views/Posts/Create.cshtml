@@ -1,41 +1,51 @@
-﻿@model MLInstagram.Models.Post
+﻿@using Microsoft.AspNetCore.Identity
+@using MLInstagram.Data
+
+@model MLInstagram.Models.Post
+
+@inject UserManager<MLInstagramUser> UserManager
+
 
 @{
 	ViewData["Title"] = "Create";
 }
-<form method="post" asp-controller="Posts" asp-action="Create">
+<form method="post" enctype="multipart/form-data" asp-controller="Posts" asp-action="Create">
 	<div class="container">
-		<div class="row vertical-center">
-			<div class="col-8">
-				<div class="card border border-3">
+		<div class="row">
+			<div class="card create-body">
+				<div class="col-12">
 					<div class="card-header-custom">
 						<div class="text-center">
-							<h4 class="upload-text d-inline">Upload</h4>
+							<h6 class="d-inline post-header" id="upload-text">Upload</h6>
 							<a class="d-none create-next-btn btn btn-primary float-end">Next</a>
+							<button type="submit" class="d-none create-submit-btn btn btn-primary float-end">Submit</button>
+							<a class="d-none create-back-btn btn btn-danger float-start" asp-action="Create">Cancel</a>
 						</div>
 					</div>
-					<div class="card-body create-card-body">
-						<div class="create-elements text-center">
-							<img src="https://i.pinimg.com/736x/dc/70/7c/dc707c0e2e4a1883d4ebb81d107aec9a.jpg" width="100" height="100" />
-							<h5 class="card-title mx-3 my-3">Drag Photos And Videos Here</h5>
-							<input type="file" id="upload-post" name="upload-post" accept="image/jpeg, image/png, image/jpg, video/mp4" hidden />
-							<label class="btn btn-primary" id="upload-post-label" for="upload-post">Select From Computer</label>
+				</div>
+				<div class="card-body">
+					<div class="row create-body-row justify-content-center">
+						<div class="col-8 create-card-left">
+							<div class="create-elements text-center">
+								<img src="https://i.pinimg.com/736x/dc/70/7c/dc707c0e2e4a1883d4ebb81d107aec9a.jpg" width="100" height="100" />
+								<h5 class="card-title mx-3 my-3 create-page-text">Drag Photos And Videos Here</h5>
+								<input type="file" id="upload-post" name="file" accept="image/jpeg, image/png, image/jpg, video/mp4" hidden />
+								<label class="btn btn-primary" id="upload-post-label" for="upload-post">Select From Computer</label>
+							</div>
+						</div>
+						<div class="d-none col-4 create-card-right">
+							<div class="mb-3">
+								<img src="@Url.Content(UserManager.Users.FirstOrDefault(x => x.UserName == UserManager.GetUserName(User)).ProfilePicUrl)" class="dp-thumbnail" />
+								<p class="d-inline site-text">@UserManager.Users.FirstOrDefault(x => x.UserName ==UserManager.GetUserName(User)).IGHandle</p>
+							</div>
+							<textarea class="form-control-custom create-body mt-4" id="caption-text" placeholder="Write a caption..." name="caption"></textarea>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="col-4">
-				<div class="card border border-3">
-					<div class="card-body">
-						<input type="text" class="form-control" id="post-caption" placeholder="Write a caption..."/>
-					</div>
-				</div>
-			</div>
-
 		</div>
 	</div>
 </form>
-
 <script type="text/javascript" src="~/js/CreatePost.js"></script>
 
 @section Scripts {

@@ -1,59 +1,69 @@
-﻿@model IEnumerable<MLInstagram.Models.Post>
+﻿@using Microsoft.AspNetCore.Identity
+@using MLInstagram.Data
 
-@{
-    ViewData["Title"] = "Index";
-}
+@model IEnumerable<MLInstagram.Models.Post>
 
-<h1>Index</h1>
+@inject UserManager<MLInstagramUser> UserManager
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="container">
+	@foreach (var item in Model)
+	{
+		<div class="row justify-content-center">
+			<div class="col-6">
+				<div class="my-3">
+					<img src="@Url.Content(ViewBag.CurrentUser.ProfilePicUrl)" class="dp-thumbnail" />
+					<p class="d-inline site-text">@ViewBag.CurrentUser.IGHandle</p>
+					<p class="d-inline site-text fw-lighter"> - @((ViewBag.CurrentDate - item.DatePosted).Hours)h ago</p>
+				</div>
+				<img src="@Url.Content(item.S3Url)" class="post-image" />
+				<div class="post-caption my-3">
+					<p class="fw-bolder d-inline site-text">@ViewBag.CurrentUser.IGHandle</p>
+					<p class="d-inline site-text">@item.Caption</p>
+				</div>
+			</div>
+		</div>
+	}
+</div>
+
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DatePosted)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Caption)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Length)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Width)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DatePosted)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Caption)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Length)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Width)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.DatePosted)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.FileName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Caption)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.UploaderId)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.DatePosted)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.FileName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Caption)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.UploaderId)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
