@@ -37,6 +37,12 @@ namespace MLInstagram.Controllers
 			return View(await context.ToListAsync());
 		}
 
+		// GET: Explore
+		public async Task<IActionResult> Explore()
+		{
+			return View(await _context.Posts.ToListAsync());
+		}
+
 		// GET: Posts/Details/5
 		public async Task<IActionResult> Details(int? id)
 		{
@@ -51,7 +57,8 @@ namespace MLInstagram.Controllers
 			{
 				return NotFound();
 			}
-
+			ViewBag.Uploader = _userManager.Users.FirstOrDefault(user => user.Id == posts.UploaderId);
+			ViewBag.CurrentDate = DateTime.Now;
 			return View(posts);
 		}
 

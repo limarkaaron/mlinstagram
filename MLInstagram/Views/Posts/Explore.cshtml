@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MLInstagram.Data
+
+@model IEnumerable<MLInstagram.Models.Post>
+
+<div class="container">
+	<div class="row">
+		@foreach (var item in Model)
+		{
+			<div class="col-4 g-0">
+				<div class="explore-image-container">
+					<a asp-action="Details" asp-route-id="@item.Id"><img src="@Url.Content(item.S3Url)" class="explore-image" /></a>
+				</div>
+			</div>
+		}
+	</div>
+</div>

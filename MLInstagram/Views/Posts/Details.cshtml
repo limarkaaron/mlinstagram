@@ -1,30 +1,54 @@
-﻿@model MLInstagram.Models.Post
+﻿@using Microsoft.AspNetCore.Identity
+@using MLInstagram.Data
 
-@{
-    ViewData["Title"] = "Details";
-}
+@model MLInstagram.Models.Post
 
-<h1>Details</h1>
+@inject UserManager<MLInstagramUser> UserManager
 
-<div>
-    <h4>Posts</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DatePosted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DatePosted)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Caption)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Caption)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<a class="btn btn-danger mb-3" asp-action="Explore">Back To Explore</a>
+<div class="container">
+	<div class="row">
+		<div class="col-7 border border-end-0 g-0 details-image-container">
+			<img src="@Url.Content(Model.S3Url)" class="details-image" />
+		</div>
+		<div class="col-5 border">
+			<div class="row details-header">
+				<div class="col-2">
+					<img src="@Url.Content(ViewBag.Uploader.ProfilePicUrl)" class="dp-thumbnail img-fluid" />
+				</div>
+				<div class="col-10 g-0">
+					<p class="d-inline site-text fw-bold">@ViewBag.Uploader.IGHandle • </p>
+					<a class="d-inline text-primary fw-bolder text-decoration-none" asp-action="Index">Follow</a>
+				</div>
+			</div>
+			<div class="details-body">
+				<div class="row text-block">
+					<div class="col-2">
+						<img src="@Url.Content(ViewBag.Uploader.ProfilePicUrl)" class="dp-thumbnail img-fluid" />
+					</div>
+					<div class="col-10 g-0">
+						<p class="d-inline site-text fw-bold">@ViewBag.Uploader.IGHandle</p>
+						<p class="d-inline site-text">@Model.Caption</p>
+						<p class="site-text"><small>@((ViewBag.CurrentDate - Model.DatePosted).Hours)h</small></p>
+					</div>
+				</div>
+				<div class="row text-block">
+					<div class="col-2">
+						<img src="@Url.Content(ViewBag.Uploader.ProfilePicUrl)" class="dp-thumbnail img-fluid" />
+					</div>
+					<div class="col-10 g-0">
+						<p class="site-text">Insert list of comments here (attribute not yet initialized in model)</p>
+					</div>
+				</div>
+			</div>
+			<div class="details-buttons">
+				<div class="row text-block">
+					<div class="col-12">
+						<input type="checkbox" id="heartButton">
+						<label for="heartButton" class="heart-button-label">&#9829</label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
