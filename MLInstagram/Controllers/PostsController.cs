@@ -75,7 +75,11 @@ namespace MLInstagram.Controllers
 		public async Task<IActionResult> Create(IFormFile file, string caption)
 		{
 			string objectUrl;
-			int uniqueNum = _context.Posts.OrderBy(x => x.Id).Last().Id;
+			int uniqueNum = 0;
+			if (_context.Posts.Count() !=0)
+			{
+				uniqueNum = _context.Posts.OrderBy(x => x.Id).Last().Id;
+			}
 
 			//access key and secret key with S3 region
 			using (var amazonS3client = new AmazonS3Client(_options.Value.AccessKey, _options.Value.SecretKey, RegionEndpoint.APSoutheast1))
