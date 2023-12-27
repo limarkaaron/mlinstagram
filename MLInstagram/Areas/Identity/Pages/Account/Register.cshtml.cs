@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -135,7 +136,7 @@ namespace MLInstagram.Areas.Identity.Pages.Account
                 user.FullName = Input.FullName;
                 user.IGHandle = Input.IGHandle;
                 user.ProfilePicUrl = "~/images/profpicdefault.jpg";
-
+                Debug.WriteLine(Input.Password);
 
 				var result = await _userManager.CreateAsync(user, Input.Password);
 
